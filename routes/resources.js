@@ -1,6 +1,6 @@
 'use strict';
 
-const express        = require('express')
+var express        = require('express')
     , Resource       = require('../models/resource')
     , Comment        = require('../models/comment')
     , authMiddleware = require('../util/auth-middleware')

@@ -1,6 +1,6 @@
 'use strict';
 
-const mongoose = require('mongoose')
+var mongoose = require('mongoose')
     , Resource = require('./resource')
     , User     = require('./user');
 

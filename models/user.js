@@ -1,6 +1,6 @@
 'use strict';
 
-const mongoose = require('mongoose')
+var mongoose = require('mongoose')
     , jwt      = require('jwt-simple')
     , bcrypt   = require('bcryptjs')
     , crypto   = require('crypto')

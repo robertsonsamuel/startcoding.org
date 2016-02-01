@@ -1,6 +1,6 @@
 'use strict';
 
-const jwt    = require('jwt-simple')
+var jwt    = require('jwt-simple')
     , moment = require('moment')
     , CONFIG = require('./auth-config')
     , User   = require('../models/user');

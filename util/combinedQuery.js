@@ -1,6 +1,6 @@
 'use strict';
 
-const User     = require('../models/user')
+var User     = require('../models/user')
     , Resource = require('../models/resource')
     , Comment  = require('../models/comment');
 

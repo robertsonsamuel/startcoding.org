@@ -1,8 +1,8 @@
 'use strict';
 
-const NUM_TO_RETURN = 50; // used in the 'condition' method
+var NUM_TO_RETURN = 50; // used in the 'condition' method
 
-const mongoose = require('mongoose')
+var mongoose = require('mongoose')
     , User     = require('./user');
 
 let Resource;
