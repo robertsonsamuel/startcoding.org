@@ -13,14 +13,14 @@ var PORT         = process.env.PORT || 3000
 
 mongoose.connect(mongoUrl);
 
-let app = express();
-let router = express.Router();
+var app = express();
+var router = express.Router();
 
 // CORS
-let whitelist = ['http://robertsonsamuel.github.io', 'http://localhost:8000'];
-let corsOptions = {
+var whitelist = ['http://robertsonsamuel.github.io', 'http://localhost:8000'];
+var corsOptions = {
   origin: function(origin, callback) {
-    let originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+    var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
     callback(null, originIsWhitelisted);
   }
 };

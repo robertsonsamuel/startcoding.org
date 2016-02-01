@@ -7,7 +7,7 @@ var express        = require('express')
     , combinedQuery  = require('../util/combinedQuery');
 
 
-let router = express.Router();
+var router = express.Router();
 
 router.get('/:userId', authMiddleware, (req, res) => {
   if (req.params.userId !== req.userId) return res.status(403).send("unauthorized");

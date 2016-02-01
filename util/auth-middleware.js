@@ -11,7 +11,7 @@ module.exports = function(req, res, next) {
     return res.status(401).send('authorization required');
   }
 
-  let token = req.headers.authorization.replace('Bearer ', '');
+  var token = req.headers.authorization.replace('Bearer ', '');
 
   try {
     var decoded = jwt.decode(token, process.env.JWT_SECRET);

@@ -11,10 +11,10 @@ var mongoose = require('mongoose')
     , domain   = process.env.MAILGUN_DOMAIN
     , mailgun  = require('mailgun-js')({apiKey: api_key, domain: domain})
 
-let User;
+var User;
 
 
-let userSchema = mongoose.Schema({
+var userSchema = mongoose.Schema({
   username: {type: String, required: true, unique: true},
   password: {type: String, required: true, select: false},
   email: {type: String, select: false},
@@ -27,7 +27,7 @@ let userSchema = mongoose.Schema({
 
 
 userSchema.methods.token = function() {
-  let payload = {
+  var payload = {
     id: this._id,
     iat: moment().unix(),
     exp: moment().add(CONFIG.expTime.num, CONFIG.expTime.unit).unix(),
@@ -45,7 +45,7 @@ userSchema.statics.login = function(userInfo, cb) {
     bcrypt.compare(userInfo.password, foundUser.password, (err, isGood) => {
       if (err) return cb('Server Error');
       if (isGood) {
-        let token = foundUser.token()
+        var token = foundUser.token()
         foundUser = foundUser.toObject();
         delete foundUser.password;
         console.log("Returning saved user", foundUser);
@@ -59,7 +59,7 @@ userSchema.statics.login = function(userInfo, cb) {
 
 
 userSchema.statics.register = function(userInfo, cb) {
-  let username  = userInfo.username
+  var username  = userInfo.username
     , email     = userInfo.email
     , password  = userInfo.password
     , password2 = userInfo.password2;
@@ -80,7 +80,7 @@ userSchema.statics.register = function(userInfo, cb) {
   }
 
   // create user model
-  let newUserQuery = email ? { $or: [{email: email}, {username: username}] } : {username: username};
+  var newUserQuery = email ? { $or: [{email: email}, {username: username}] } : {username: username};
   User.findOne(newUserQuery).select('+email').exec((err, user) => {
     if (err) return cb('Error registering username.');
     if (user) {
@@ -91,7 +91,7 @@ userSchema.statics.register = function(userInfo, cb) {
       if (err) return cb(err);
       bcrypt.hash(password, salt, (err, hashedPassword) => {
         if (err) return cb(err);
-        let newUser = new User({
+        var newUser = new User({
           username: username,
           email: email,
           password: hashedPassword
@@ -101,7 +101,7 @@ userSchema.statics.register = function(userInfo, cb) {
         newUser.save((err, savedUser) => {
           if(err || !savedUser) return cb('Username or email already taken.');
           if(savedUser.email){
-             let emailData = {
+             var emailData = {
                 from: 'welcome@startcoding.com',
                 to: savedUser.email,
                 subject: 'Welcome To StartCoding.org!',
@@ -115,7 +115,7 @@ userSchema.statics.register = function(userInfo, cb) {
             });
            }
 
-          let token = savedUser.token()
+          var token = savedUser.token()
           savedUser = savedUser.toObject();
           delete savedUser.password;
           console.log("returning saved user", savedUser);
@@ -131,7 +131,7 @@ userSchema.statics.recovery = function(req, cb){
   async.waterfall([
     function(done) {
       crypto.randomBytes(20, function(err, buf) {
-        let token = buf.toString('hex');
+        var token = buf.toString('hex');
         done(err, token);
       });
     },
@@ -150,7 +150,7 @@ userSchema.statics.recovery = function(req, cb){
       });
     },
     function(token, user, done) {
-      let emailData = {
+      var emailData = {
         from: 'passwordreset@startcoding.com',
         to: req.body.email,
         subject: 'StartCoding.org Password Reset',
@@ -199,7 +199,7 @@ userSchema.statics.reset = function(req, cb){
       });
     },
     function(user, done) {
-      let emailData = {
+      var emailData = {
         from: 'passwordreset@startcoding.com',
         to: user.email,
         subject: 'Your password has been changed',

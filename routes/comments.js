@@ -5,7 +5,7 @@ var express        = require('express')
     , User           = require('../models/user')
     , authMiddleware = require('../util/auth-middleware');
 
-let router = express.Router();
+var router = express.Router();
 
 router.get('/:root', (req, res) => {
   Comment.find({'root' : req.params.root })

@@ -6,12 +6,12 @@ var express        = require('express')
     , authMiddleware = require('../util/auth-middleware')
     , combinedQuery  = require('../util/combinedQuery');
 
-let router = express.Router();
+var router = express.Router();
 
 // takes a url like /resources/javascript?tags=tag1,tag2,tag3&query=string&newest=true
 router.get('/:category', (req, res) => {
   Resource.filterResources(req, (err, resources) => {
-    let newest = req.query && (req.query.newest === 'true');
+    var newest = req.query && (req.query.newest === 'true');
     res.status(err ? 400 : 200).send(err || Resource.condition(resources, newest));
   });
 });

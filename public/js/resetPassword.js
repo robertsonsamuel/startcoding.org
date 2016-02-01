@@ -1,14 +1,14 @@
 'use strict';
 
 $(document).ready(function() {
-  let canSubmit = false;
+  var canSubmit = false;
   $("#password, #password2").keyup(validate);
   $('#sendForm').submit(resetPassword);
 
 
 function validate (){
-  let password = $("#password").val();
-  let password2 = $("#password2").val();
+  var password = $("#password").val();
+  var password2 = $("#password2").val();
 
     if(password == password2) {
        $("#alertSucess").show().text("Passwords Match");
@@ -28,8 +28,8 @@ function validate (){
 function resetPassword(event) {
 event.preventDefault();
  if(canSubmit){
-   let password = $("#password").val();
-   let token = window.location.href.split('/')[4]
+   var password = $("#password").val();
+   var token = window.location.href.split('/')[4]
    console.log(token);
     $.post(`/users/reset/${token}`, {password : password })
     .done(function (resp) {

@@ -4,10 +4,10 @@ var mongoose = require('mongoose')
     , Resource = require('./resource')
     , User     = require('./user');
 
-let Comment;
+var Comment;
 
 
-let commentSchema = mongoose.Schema({
+var commentSchema = mongoose.Schema({
   body: { type: String, required: true },
   user: { type: mongoose.Schema.Types.ObjectId , ref: 'User', required: true },
   root: { type: mongoose.Schema.Types.ObjectId , ref: 'Resource', required: true },
@@ -27,7 +27,7 @@ function changeCommentCount(resourceId, inc) {
 
 
 commentSchema.statics.createNewComment = (req, cb) => {
-  let newComment = req.body
+  var newComment = req.body
     , seed       = req.query.seed
     , params     = req.params
     , userId     = req.userId;
@@ -55,11 +55,11 @@ commentSchema.statics.createNewComment = (req, cb) => {
 
 
 commentSchema.statics.editComment = (req, cb) => {
-  let commentUpdate = req.body
+  var commentUpdate = req.body
     , updateId      = req.params.commentId
     , userId        = req.userId;
 
-  let errMsg = "error updating comment";
+  var errMsg = "error updating comment";
   Comment.findOne({ _id: updateId, user: userId, timestamp: { $ne: null } }, (err, foundComment) => {
     if (err || !foundComment) return cb(err || errMsg);
     foundComment.body = req.body.body;
@@ -73,10 +73,10 @@ commentSchema.statics.editComment = (req, cb) => {
 
 
 commentSchema.statics.deleteComment = (req, cb) => {
-  let updateId = req.params.commentId
+  var updateId = req.params.commentId
     , userId   = req.userId;
 
-  let errMsg = "error deleteing comment";
+  var errMsg = "error deleteing comment";
   Comment.findOne({ _id: updateId, user: userId, timestamp: { $ne: null } }, (err, foundComment) => {
     if (err || !foundComment) return cb(err || errMsg);
     foundComment.body = '[deleted]';
@@ -92,10 +92,10 @@ commentSchema.statics.deleteComment = (req, cb) => {
 
 
 commentSchema.statics.treeify = (comments) => {
-  let childrenDictionary = comments.reduce((childrenDictionary, comment) => {
+  var childrenDictionary = comments.reduce((childrenDictionary, comment) => {
     comment.score = comment.upvotes - comment.downvotes;
 
-    let parent = comment.parent || 'root';
+    var parent = comment.parent || 'root';
     if (childrenDictionary[parent]) {
       childrenDictionary[parent].push(comment);
     } else {
@@ -122,14 +122,14 @@ commentSchema.statics.treeify = (comments) => {
 
 
 commentSchema.statics.vote = (req, cb) => {
-  let findComment = new Promise((resolve, reject) => {
+  var findComment = new Promise((resolve, reject) => {
     Comment.findById(req.params.commentId, (err, comment) => {
       if (err || !comment) return reject(err || "no comment found");
       resolve(comment);
     });
   });
 
-  let findUser = new Promise((resolve, reject) => {
+  var findUser = new Promise((resolve, reject) => {
     User.findById(req.userId, (err, user) => {
       if (err || !user) return reject(err || "no user found");
       resolve(user);
@@ -141,17 +141,17 @@ commentSchema.statics.vote = (req, cb) => {
   });
 
   function applyVote(commentAndUserArr) {
-    let foundComment = commentAndUserArr[0];
-    let foundUser = commentAndUserArr[1];
-    let vote = req.body.vote
+    var foundComment = commentAndUserArr[0];
+    var foundUser = commentAndUserArr[1];
+    var vote = req.body.vote
 
-    let upIndex = foundUser.upvotes.indexOf(foundComment._id);
+    var upIndex = foundUser.upvotes.indexOf(foundComment._id);
     if (upIndex === -1) upIndex = Infinity;
-    let downIndex = foundUser.downvotes.indexOf(foundComment._id);
+    var downIndex = foundUser.downvotes.indexOf(foundComment._id);
     if (downIndex === -1) downIndex = Infinity;
 
-    let downInc = 0;
-    let upInc = 0;
+    var downInc = 0;
+    var upInc = 0;
 
     if (vote === 'up'){
       if (upIndex === Infinity) {
@@ -179,15 +179,15 @@ commentSchema.statics.vote = (req, cb) => {
       return cb("invalid vote");
     }
 
-    let saveUser = new Promise( (resolve, reject) => {
+    var saveUser = new Promise( (resolve, reject) => {
       foundUser.save( (err, savedUser) => {
         if (err) return reject(err);
         resolve(savedUser);
       })
     })
 
-    let updateComment = new Promise( (resolve, reject) => {
-      let increments =  { $inc: { upvotes: upInc, downvotes: downInc } };
+    var updateComment = new Promise( (resolve, reject) => {
+      var increments =  { $inc: { upvotes: upInc, downvotes: downInc } };
       Comment.findByIdAndUpdate(foundComment._id, increments, (err, updatedComment) => {
         if (err) return reject(err);
         resolve(updatedComment);

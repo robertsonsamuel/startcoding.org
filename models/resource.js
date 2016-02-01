@@ -5,10 +5,10 @@ var NUM_TO_RETURN = 50; // used in the 'condition' method
 var mongoose = require('mongoose')
     , User     = require('./user');
 
-let Resource;
+var Resource;
 
 
-let resourceSchema = mongoose.Schema({
+var resourceSchema = mongoose.Schema({
   title: { type: String, required: true },
   link: { type: String, required: true},
   body: { type: String, default: "" },
@@ -33,17 +33,17 @@ String.prototype.escapeRegExp = function() {
 //   - have a title or tag that contains the given query, and
 //   - have not been deleted
 resourceSchema.statics.filterResources = (req, cb) => {
-  let filter = (req.params.category.toLowerCase() === 'all') ? {} : { category: req.params.category.toLowerCase() };
+  var filter = (req.params.category.toLowerCase() === 'all') ? {} : { category: req.params.category.toLowerCase() };
 
   if (req.query.tags) {
-    let tags = req.query.tags.split(',').map(tag => {
+    var tags = req.query.tags.split(',').map(tag => {
       return { tags: tag };
     });
     filter['$and'] = tags;
   }
 
   if (req.query.query) {
-    let re = new RegExp(req.query.query.escapeRegExp(), 'i');
+    var re = new RegExp(req.query.query.escapeRegExp(), 'i');
     filter['$or'] = [ { title: re }, { tags: re } ]; // this can be extended to include body, if desired
   }
 
@@ -62,7 +62,7 @@ resourceSchema.statics.filterResources = (req, cb) => {
 //   tags - an object of all unique tags on the resources with frequency counts
 //   resources - the resources modified with a score and sorted by that score
 resourceSchema.statics.condition = (resources, newest) => {
-  let tags = resources.reduce((tags, resource) => {
+  var tags = resources.reduce((tags, resource) => {
     if (resource.tags) {
       resource.tags.forEach(tag => {
         tags[tag] = tags[tag] ? tags[tag] + 1 : 1;
@@ -71,7 +71,7 @@ resourceSchema.statics.condition = (resources, newest) => {
     return tags;
   }, {});
 
-  let conditioned = resources.map((resource) => {
+  var conditioned = resources.map((resource) => {
     // you can adjust the score calculation here
     resource.score = resource.upvotes - resource.downvotes;
     return resource;
@@ -91,11 +91,11 @@ resourceSchema.statics.condition = (resources, newest) => {
 
 
 resourceSchema.statics.editResource = (req, cb) => {
-  let resourceUpdate = req.body
+  var resourceUpdate = req.body
     , updateId       = req.params.resourceId
     , userId         = req.userId;
 
-  let errMsg = "error updating resource";
+  var errMsg = "error updating resource";
   Resource.findOne({ _id: updateId, user: userId, timestamp: { $ne: null } }, (err, foundResource) => {
     if (err || !foundResource) return cb(err || errMsg);
     foundResource.body = req.body.body;
@@ -112,10 +112,10 @@ resourceSchema.statics.editResource = (req, cb) => {
 
 
 resourceSchema.statics.deleteResource = (req, cb) => {
-  let updateId = req.params.resourceId
+  var updateId = req.params.resourceId
     , userId   = req.userId;
 
-  let errMsg = "error deleteing resource";
+  var errMsg = "error deleteing resource";
   Resource.findOne({ _id: updateId, user: userId, timestamp: { $ne: null } }, (err, foundResource) => {
     if (err || !foundResource) return cb(err || errMsg);
     foundResource.title += ' [deleted]';
@@ -130,14 +130,14 @@ resourceSchema.statics.deleteResource = (req, cb) => {
 
 
 resourceSchema.statics.vote = (req, cb) => {
-  let findResource = new Promise((resolve, reject) => {
+  var findResource = new Promise((resolve, reject) => {
     Resource.findById(req.params.resourceId, (err, resource) => {
       if (err || !resource) return reject(err || "no resource found");
       resolve(resource);
     });
   });
 
-  let findUser = new Promise((resolve, reject) => {
+  var findUser = new Promise((resolve, reject) => {
     User.findById(req.userId, (err, user) => {
       if (err || !user) return reject(err || "no user found");
       resolve(user);
@@ -149,17 +149,17 @@ resourceSchema.statics.vote = (req, cb) => {
   });
 
   function applyVote(resourceAndUserArr) {
-    let foundResource = resourceAndUserArr[0];
-    let foundUser = resourceAndUserArr[1];
-    let vote = req.body.vote
+    var foundResource = resourceAndUserArr[0];
+    var foundUser = resourceAndUserArr[1];
+    var vote = req.body.vote
 
-    let upIndex = foundUser.upvotes.indexOf(foundResource._id);
+    var upIndex = foundUser.upvotes.indexOf(foundResource._id);
     if (upIndex === -1) upIndex = Infinity;
-    let downIndex = foundUser.downvotes.indexOf(foundResource._id);
+    var downIndex = foundUser.downvotes.indexOf(foundResource._id);
     if (downIndex === -1) downIndex = Infinity;
 
-    let downInc = 0;
-    let upInc = 0;
+    var downInc = 0;
+    var upInc = 0;
 
     if (vote === 'up'){
       if (upIndex === Infinity) {
@@ -187,15 +187,15 @@ resourceSchema.statics.vote = (req, cb) => {
       return cb("invalid vote");
     }
 
-    let saveUser = new Promise( (resolve, reject) => {
+    var saveUser = new Promise( (resolve, reject) => {
       foundUser.save( (err, savedUser) => {
         if (err) return reject(err);
         resolve(savedUser);
       })
     })
 
-    let updateResource = new Promise( (resolve, reject) => {
-      let increments =  { $inc: { upvotes: upInc, downvotes: downInc } };
+    var updateResource = new Promise( (resolve, reject) => {
+      var increments =  { $inc: { upvotes: upInc, downvotes: downInc } };
       Resource.findByIdAndUpdate(foundResource._id, increments, (err, updatedResource) => {
         if (err) return reject(err);
         resolve(updatedResource);

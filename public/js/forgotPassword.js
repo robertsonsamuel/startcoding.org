@@ -4,7 +4,7 @@ $(document).ready(function() {
 
   $('#resetForm').submit((event) => {
     event.preventDefault();
-    let email = $('#emailInput').val();
+    var email = $('#emailInput').val();
 
     console.log(email);
     $.post('users/forgot', {email:email})

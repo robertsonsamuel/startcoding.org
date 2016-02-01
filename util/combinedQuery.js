@@ -29,14 +29,14 @@ module.exports = {
 
   saveResource: (resourceId, userId, cb) => {
     // validate the existence of resource
-    let findResource = new Promise((resolve, reject) => {
+    var findResource = new Promise((resolve, reject) => {
       Resource.findById(resourceId, (err, resource) => {
         if (err || !resource) return reject(err || "no resource found");
         resolve(resource);
       });
     });
 
-    let findUser = new Promise((resolve, reject) => {
+    var findUser = new Promise((resolve, reject) => {
       User.findById(userId, (err, user) => {
         if (err || !user) return reject(err || "no user found");
         resolve(user);
@@ -45,8 +45,8 @@ module.exports = {
 
     Promise.all([findResource, findUser])
       .then((resourceAndUser) => {
-        let user = resourceAndUser[1];
-        let saveIndex = user.savedResources.indexOf(resourceId);
+        var user = resourceAndUser[1];
+        var saveIndex = user.savedResources.indexOf(resourceId);
         if (saveIndex === -1) {
           user.savedResources.push(resourceId);
         } else {
@@ -63,7 +63,7 @@ module.exports = {
   },
 
   fullResource: (resourceId, cb) => {
-    let findResource = new Promise((resolve, reject) => {
+    var findResource = new Promise((resolve, reject) => {
       Resource.findById(resourceId)
         .populate({ path: 'user', select: 'username _id'})
         .exec((err, resource) => {
@@ -72,7 +72,7 @@ module.exports = {
         });
     });
 
-    let findComments = new Promise((resolve, reject) => {
+    var findComments = new Promise((resolve, reject) => {
       Comment.find({'root' : resourceId })
         .sort({'timestamp': -1})
         .lean()
@@ -84,7 +84,7 @@ module.exports = {
 
     Promise.all([findComments, findResource])
       .then((commentsAndResource) => {
-        let resp = {
+        var resp = {
           comments: commentsAndResource[0],
           resource: commentsAndResource[1]
         }
