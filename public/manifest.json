@@ -1,0 +1,19 @@
+{
+  "short_name": "Start Coding!",
+  "name": "Start Coding!",
+  "icons": [
+    {
+      "src": "./logo.png",
+      "sizes": "192x173",
+      "type": "image/png"
+    },
+    {
+      "src": "./logo_large.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "background_color":"white",
+  "theme_color":"#22659C",
+  "display": "standalone"
+}

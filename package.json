@@ -1,0 +1,38 @@
+{
+  "name": "startcoding",
+  "version": "1.0.0",
+  "description": "*By Nicholas, Paul, and Sam*",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "setup": "rm -rf node_modules && npm i"
+  },
+  "engines": {
+    "node": "5.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robertsonsamuel/startcoding-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/robertsonsamuel/startcoding-backend/issues"
+  },
+  "homepage": "https://github.com/robertsonsamuel/startcoding-backend#readme",
+  "dependencies": {
+    "async": "^1.5.2",
+    "bcryptjs": "^2.3.0",
+    "body-parser": "^1.14.2",
+    "compression": "^1.6.1",
+    "cookie-parser": "^1.4.1",
+    "cors": "^2.7.1",
+    "ejs": "^2.4.1",
+    "express": "^4.13.3",
+    "jwt-simple": "^0.4.1",
+    "mailgun-js": "^0.7.7",
+    "moment": "^2.11.1",
+    "mongoose": "^4.3.6",
+    "morgan": "^1.6.1"
+  }
+}
