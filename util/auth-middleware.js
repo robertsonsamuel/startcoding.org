@@ -1,11 +1,11 @@
 'use strict';
 
-var jwt    = require('jwt-simple')
-    , moment = require('moment')
-    , CONFIG = require('./auth-config')
-    , User   = require('../models/user');
+var jwt = require('jwt-simple'),
+    moment = require('moment'),
+    CONFIG = require('./auth-config'),
+    User = require('../models/user');
 
-module.exports = function(req, res, next) {
+module.exports = function (req, res, next) {
 
   if (!req.headers.authorization) {
     return res.status(401).send('authorization required');
@@ -24,7 +24,7 @@ module.exports = function(req, res, next) {
   }
 
   if (CONFIG.refreshToken) {
-    User.findOneById(decoded.id, (err, user) => {
+    User.findOneById(decoded.id, function (err, user) {
       if (err) return res.status(400).send('server error');
       if (!user) return res.status(401).send('authorization required');
       req.userId = decoded.id;

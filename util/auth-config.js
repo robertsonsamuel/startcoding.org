@@ -1,13 +1,13 @@
 'use strict';
 
 module.exports = {
-  expTime: {num: 7, unit: 'days'},
+  expTime: { num: 7, unit: 'days' },
   refreshToken: false,
   saltRounds: 10,
-  validatePassword: function(password) {
+  validatePassword: function validatePassword(password) {
     return true;
   },
-  validateUsername: function(username) {
-    return (username.length >= 3);
+  validateUsername: function validateUsername(username) {
+    return username.length >= 3;
   }
 };
