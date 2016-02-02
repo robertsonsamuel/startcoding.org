@@ -17,7 +17,7 @@ router.get('/tags', function (req, res) {
       }
       return tags;
     }, new Set());
-
+    console.log('tags before 21',tags);
     res.send(Array.from(tags));
   });
 });
